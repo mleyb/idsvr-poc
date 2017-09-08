@@ -15,7 +15,9 @@ namespace IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddIdentityServer()
-                    .AddTemporarySigningCredential();
+                    .AddTemporarySigningCredential()
+                    .AddInMemoryApiResources(IdentityConfig.GetApiResources())
+                    .AddInMemoryClients(IdentityConfig.GetClients());
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
