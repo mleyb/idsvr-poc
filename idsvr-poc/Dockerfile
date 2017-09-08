@@ -1,16 +1,12 @@
-FROM microsoft/aspnetcore-build:1.1 AS build-env
-WORKDIR /app
-
-# Copy csproj and restore as distinct layers
-COPY *.csproj ./
+FROM microsoft/aspnetcore-build:1.1 as publish
+WORKDIR /publish
+COPY idsvr-poc.csproj .
 RUN dotnet restore
+COPY . .
+RUN dotnet publish --output ./out
 
-# Copy everything else and build
-COPY . ./
-RUN dotnet publish -c Release -o out
-
-# Build runtime image
-FROM microsoft/aspnetcore:1.1
-WORKDIR /app
-COPY --from=build-env /app/out .
+FROM microsoft/dotnet:1.1-runtime
+WORKDIR /dotnetapp
+COPY --from=publish /publish/out .
+ENV ASPNETCORE_URLS "http://0.0.0.0:5000/"
 ENTRYPOINT ["dotnet", "idsrv-poc.dll"]
