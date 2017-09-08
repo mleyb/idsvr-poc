@@ -1,12 +1,16 @@
-FROM microsoft/aspnetcore-build:1.1 as publish
-WORKDIR /publish
-COPY IdentityServer.csproj .
-RUN dotnet restore
-COPY . .
-RUN dotnet publish --output ./out
+FROM microsoft/aspnetcore-build:1.1 AS build-env
+WORKDIR /app
 
-FROM microsoft/dotnet:1.1-runtime
-WORKDIR /dotnetapp
-COPY --from=publish /publish/out .
-ENV ASPNETCORE_URLS "http://0.0.0.0:5000/"
+# Copy csproj and restore as distinct layers
+COPY *.csproj ./
+RUN dotnet restore
+
+# Copy everything else and build
+COPY . ./
+RUN dotnet publish -c Release -o out
+
+# Build runtime image
+FROM microsoft/aspnetcore:1.1
+WORKDIR /app
+COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "IdentityServer.dll"]
