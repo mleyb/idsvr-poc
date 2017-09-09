@@ -1,16 +1,17 @@
-FROM microsoft/aspnetcore-build:1.1.2 AS build-env
-WORKDIR /app
+ # Stage 1
+ FROM microsoft/aspnetcore-build AS builder
+ WORKDIR /source
 
-# Copy csproj and restore as distinct layers
-COPY *.csproj ./
-RUN dotnet restore
+ # caches restore result by copying csproj file separately
+ COPY *.csproj .
+ RUN dotnet restore
 
-# Copy everything else and build
-COPY . ./
-RUN dotnet publish -c Release -o out
+ # copies the rest of your code
+ COPY . .
+ RUN dotnet publish --output /app/ --configuration Release
 
-# Build runtime image
-FROM microsoft/aspnetcore:1.1.2
-WORKDIR /app
-COPY --from=build-env /app/out .
-ENTRYPOINT ["dotnet", "IdentityServer.dll"]
+ # Stage 2
+ FROM microsoft/aspnetcore
+ WORKDIR /app
+ COPY --from=builder /app .
+ ENTRYPOINT ["dotnet", "IdentityServer.dll"]
