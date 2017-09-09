@@ -14,4 +14,5 @@
  FROM microsoft/aspnetcore
  WORKDIR /app
  COPY --from=builder /app .
+ EXPOSE 80
  ENTRYPOINT ["dotnet", "IdentityServer.dll"]
