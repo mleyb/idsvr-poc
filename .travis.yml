@@ -13,3 +13,9 @@ before_install:
 script:
   - docker build -t mleybourne/idsrv .
   - docker run mleybourne/idsrv
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker push mleybourne/idsrv;
+    fi
