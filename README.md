@@ -1,6 +1,6 @@
 # idsvr-poc
 
-Packaging IdentityServer4 in a Linux container, with CI/CD.
+Build of IdentityServer4 into a Linux container image, with CI through TravisCI, then CD to Docker Hub & Azure Web App Linux Container.
 
 https://hub.docker.com/r/mleybourne/idsrv
 
