@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer4.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,11 +15,14 @@ namespace IdentityServer
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentityServer()
-                    .AddTemporarySigningCredential()
-                    .AddInMemoryApiResources(IdentityConfig.GetApiResources())
-                    .AddInMemoryClients(IdentityConfig.GetClients())
-                    .AddTestUsers(IdentityConfig.GetUsers());
+            services.AddIdentityServer(options =>
+            {
+                options.IssuerUri = "http://ic3-idsrv.com";
+            })
+            .AddTemporarySigningCredential()
+            .AddInMemoryApiResources(IdentityConfig.GetApiResources())
+            .AddInMemoryClients(IdentityConfig.GetClients())
+            .AddTestUsers(IdentityConfig.GetUsers());
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
