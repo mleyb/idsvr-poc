@@ -12,6 +12,16 @@
   <ItemGroup>
     <PackageReference Include="identityserver4" Version="1.5.2" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel.Https" Version="1.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ic3-idsrv.azurewebsites.net.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="localhost.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

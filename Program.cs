@@ -14,8 +14,10 @@ namespace IdentityServer
             Console.Title = "IdentityServer";
 
             var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseUrls("http://*:80")
+                .UseKestrel(options => {
+                    options.UseHttps(@"ic3-idsrv.azurewebsites.net.pfx", "Password");
+                })
+                .UseUrls("https://*:40443")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
