@@ -12,7 +12,8 @@ before_install:
 
 script:
   - docker build -t $DOCKER_USERNAME/idsrv .
-  #- docker run $DOCKER_USERNAME/idsrv
+  - docker run -d $DOCKER_USERNAME/idsrv
+  - docker ps -a
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
