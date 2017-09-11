@@ -15,14 +15,12 @@ namespace IdentityServer
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentityServer(options =>
-            {
-                options.IssuerUri = "http://ic3-idsrv.com";
-            })
-            .AddTemporarySigningCredential()
-            .AddInMemoryApiResources(IdentityConfig.GetApiResources())
-            .AddInMemoryClients(IdentityConfig.GetClients())
-            .AddTestUsers(IdentityConfig.GetUsers());
+            services
+                .AddIdentityServer()
+                .AddTemporarySigningCredential()
+                .AddInMemoryApiResources(IdentityConfig.GetApiResources())
+                .AddInMemoryClients(IdentityConfig.GetClients())
+                .AddTestUsers(IdentityConfig.GetUsers());
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
