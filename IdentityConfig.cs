@@ -2,16 +2,20 @@ using System;
 using System.Collections.Generic;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
+using static IdentityServer4.IdentityServerConstants;
+using IdentityServer4;
 
 namespace IdentityServer
 {
     public static class IdentityConfig
     {
+        private const string ApiResourceName = "api";
+
         public static IEnumerable<ApiResource> GetApiResources()
         {
             return new List<ApiResource>
             {
-                new ApiResource("api1", "My API")
+                new ApiResource(ApiResourceName, "My Protected API")
             };
         }
 
@@ -33,7 +37,7 @@ namespace IdentityServer
                     },
 
                     // scopes that client has access to
-                    AllowedScopes = { "api1" }
+                    AllowedScopes = { ApiResourceName }
                 },
 
                 // resource owner password grant client
@@ -46,8 +50,27 @@ namespace IdentityServer
                     {
                         new Secret("secret".Sha256())
                     },
-                    AllowedScopes = { "api1" }
-                }
+                    AllowedScopes = { ApiResourceName }
+                },
+
+                ///////////////////////////////////////////
+                // Console Public Resource Owner Flow Sample
+                //////////////////////////////////////////
+                new Client
+                {
+                    ClientId = "roclient.public",
+                    ClientName = "roclient.public",
+                    RequireClientSecret = false,
+
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    AllowOfflineAccess = true,
+
+                    AllowedScopes = new List<string>
+                    {
+                        ApiResourceName,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                    }
+                },
             };
         }
 
